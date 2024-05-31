@@ -16,7 +16,7 @@ const MyComponent: React.FC = () => {
   const [convertedValue, setConvertedValue] = useState<number>(0.0);
   const [inputColorPay, setInputColorPay] = useState<string>("gray");
   const [inputColorReceive, setInputColorReceive] = useState<string>("gray");
-  const toast = useToast(); // Initialize toast
+  const toast = useToast(); 
 
   const fetchCurrencies = async () => {
     setIsLoading(true);
@@ -41,7 +41,7 @@ const MyComponent: React.FC = () => {
     setInputValue(inputValue);
 
     const converted = parseFloat(inputValue) * getConversionRate(selectedCurrency);
-    setConvertedValue(isNaN(converted) ? 0.0 : roundToTwoDecimalPlaces(converted));
+    setConvertedValue(isNaN(converted) ? 0.0 : truncateToTwoDecimalPlaces(converted));
 
     if (inputValue !== "0.0" && selectedCurrency !== "") {
       setInputColorPay("black");
@@ -55,9 +55,8 @@ const MyComponent: React.FC = () => {
   const handleCurrencySelect = (currency: string) => {
     setSelectedCurrency(currency);
     const converted = parseFloat(inputValue) * getConversionRate(currency);
-    setConvertedValue(isNaN(converted) ? 0.0 : roundToTwoDecimalPlaces(converted));
+    setConvertedValue(isNaN(converted) ? 0.0 : truncateToTwoDecimalPlaces(converted));
 
-    // Update input color based on input value and selected currency
     if (inputValue !== "0.0" && currency !== "") {
       setInputColorPay("black");
       setInputColorReceive("black");
@@ -72,8 +71,8 @@ const MyComponent: React.FC = () => {
     return selected ? selected.conversion_to_USD : 0.0;
   };
 
-  const roundToTwoDecimalPlaces = (num: number) => {
-    return Math.round(num * 100) / 100;
+  const truncateToTwoDecimalPlaces = (num: number) => {
+    return Math.floor(num * 100) / 100;
   };
 
   const handleConfirmClick = async () => {
@@ -153,7 +152,7 @@ const MyComponent: React.FC = () => {
             inputColor={inputColorPay}
             setInputColor={setInputColorPay}
             isButtonDisabled={false}
-            inputTestId="pay-input" // Add data-testid attribute
+            inputTestId="pay-input" 
           />
           <CurrencyCard
 
