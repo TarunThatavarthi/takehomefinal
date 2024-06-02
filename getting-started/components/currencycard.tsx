@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Image, ChakraProvider, Center, Menu, MenuButton, MenuList, MenuItem, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from "@chakra-ui/react";
+import React, { useState } from 'react';
+import { Box, Flex, Button, Text, Image, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 
+// Define the structure of the Currency object
 interface Currency {
   name: string;
   symbol: string;
   conversion_to_USD: number;
 }
 
+// Define the properties expected by the CurrencyCard component
 interface CurrencyCardProps {
   label: string;
   value: number;
@@ -26,6 +28,7 @@ interface CurrencyCardProps {
   inputTestId: string;
 }
 
+// Define the CurrencyCard component
 const CurrencyCard: React.FC<CurrencyCardProps> = ({
   label,
   value,
@@ -41,10 +44,10 @@ const CurrencyCard: React.FC<CurrencyCardProps> = ({
   currencies,
   inputColor,
   setInputColor,
-  isButtonDisabled, 
+  isButtonDisabled,
   inputTestId
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // State to manage modal visibility
 
   return (
     <Box
@@ -53,8 +56,8 @@ const CurrencyCard: React.FC<CurrencyCardProps> = ({
       borderWidth="1px"
       borderColor={isPay ? "blue.500" : "gray.200"}
       maxW={maxW}
-      w="400px" // Set fixed width
-      h="150px" // Set fixed height
+      w="400px" // Fixed width
+      h="150px" // Fixed height
     >
       <Text fontSize="md" fontWeight="medium" color="gray.600" mb={3} maxW="full">
         {label}
@@ -90,42 +93,40 @@ const CurrencyCard: React.FC<CurrencyCardProps> = ({
           gap={2}
           leftIcon={isPay && <Image src="https://cdn.builder.io/api/v1/image/assets/TEMP/69405752b7cf38fa9ead3db9ee6c4b3c0f8d42d27aac30addc26a7113b6bad69?apiKey=92a52773df144ea181bd940464e47be8&" alt="" w={3} />}
           isLoading={isLoading}
-          onClick={isButtonDisabled ? () => {} : () => setIsOpen(true)} // Disable button action
-          disabled={isButtonDisabled} // Disable the button
-          
+          onClick={isButtonDisabled ? () => {} : () => setIsOpen(true)} // Open modal unless button is disabled
+          disabled={isButtonDisabled} // Disable the button if necessary
         >
           {selectedCurrency || buttonText}
         </Button>
-        
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-  <ModalOverlay />
-  <ModalContent>
-    <ModalHeader textAlign="center">Select Asset</ModalHeader>
-    <ModalCloseButton />
-    <ModalBody>
-      <Box maxHeight="400px" overflowY="auto">
-        {currencies.map((currency, index) => (
-          <Button
-            key={index}
-            variant="ghost"
-            onClick={() => {
-              handleCurrencySelect(currency.symbol);
-              setIsOpen(false);
-            }}
-            width="100%"
-            textAlign="left"
-          >
-            <Flex flexDirection="column" alignItems="center">
-              <Text fontSize="md" fontWeight="semibold" marginBottom="1">{currency.name}</Text>
-              <Text fontSize="sm" color="gray.500">{currency.symbol}</Text>
-            </Flex>
-          </Button>
-        ))}
-      </Box>
-    </ModalBody>
-  </ModalContent>
-</Modal>
 
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}> {/* Modal for currency selection */}
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader textAlign="center">Select Asset</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Box maxHeight="400px" overflowY="auto">
+                {currencies.map((currency, index) => (
+                  <Button
+                    key={index}
+                    variant="ghost"
+                    onClick={() => {
+                      handleCurrencySelect(currency.symbol);
+                      setIsOpen(false);
+                    }}
+                    width="100%"
+                    textAlign="left"
+                  >
+                    <Flex flexDirection="column" alignItems="center">
+                      <Text fontSize="md" fontWeight="semibold" marginBottom="1">{currency.name}</Text>
+                      <Text fontSize="sm" color="gray.500">{currency.symbol}</Text>
+                    </Flex>
+                  </Button>
+                ))}
+              </Box>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       </Flex>
     </Box>
   );
